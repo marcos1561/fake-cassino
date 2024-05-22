@@ -1,6 +1,6 @@
 # Fake Cassino
 Projeto pessoal para aprender um pouco sobre desenvolvimento web com o [Django](https://www.djangoproject.com/). 
-Todo o dinheiro do cassino é fictício. Algumas objetivos do projeto são os seguintes:
+Todo o dinheiro do cassino é fictício. Alguns objetivos do projeto são os seguintes:
 
 * Mostrar de forma clara o lucro líquido do cassino e sua probabilidade de estar no lucro.
 * Calcular algumas quantidades interessantes em relação ao apostar ([sorte](#definição-da-sorte), ganho esperado, probabilidade de estar no prejuízo, etc)
