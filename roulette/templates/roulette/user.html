@@ -1,0 +1,24 @@
+{% extends "roulette/base.html" %}
+
+{% block content %}
+{% if is_authenticated %}
+  <div style="display: grid; grid-template-columns: repeat(6, 1fr);">
+    <h2>Usuário</h2>
+    <h2>Sorte</h2>
+    <h2>Ganho real</h2>
+    <h2>Ganho esperado</h2>
+    <h2>Ganho esperado ± 2σ</h2>
+    <h2>Probabilidade de<br>estar no prejuízo</h2>
+    {% for name, info in content %}
+    <div>{{ name }}</div>
+    <div>{{ info.luck }}</div>
+    <div>{{ info.gain }}</div>
+    <div>{{ info.gain_exp }}</div>
+    <div>{{ info.gain_interval }}</div>
+    <div>{{ info.lost_prob }} %</div>
+    {% endfor %}
+  </div>
+{% else %}
+  {% include "roulette/user_info.html" with is_authenticated=False %}
+{% endif %}
+{% endblock %}

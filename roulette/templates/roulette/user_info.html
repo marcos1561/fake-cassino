@@ -1,0 +1,44 @@
+{% if is_authenticated %}
+<h1 style="text-align: center;"> {{ name }} </h1>
+<div class="user_info">
+    <div class="user_wallet">
+        <div style="display: flex; flex-direction: row; gap: 0.5em;">
+            <div>Carteira:</div>
+            <div id="user_wallet"></div>
+        </div>
+        <div id="num_bets"></div>
+    </div>
+    <div class="money_info">
+        <div>Dinheiro gasto: </div>
+        <div id="money_spend"></div>
+        <div>Dinheiro ganho: </div>
+        <div id="money_won"></div>
+        <div>Lucro: </div>
+        <div id="gain"></div>
+    </div>
+</div>
+{% else %}
+<style>
+    .log_in_item {
+      color: #937f64;
+      font-size: xx-large;
+      margin: 0.5em;
+    }
+    .log_sign_in {
+      flex: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+</style>
+
+<div class="log_sign_in">
+    <a  class="log_in_item", href="{% url 'login' %}">
+        Logar
+    </a>
+    <a class="log_in_item" href="{% url 'signin' %}">
+        Cadastrar
+    </a>
+</div>
+{% endif %}

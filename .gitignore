@@ -1,0 +1,12 @@
+user_data
+open_server.sh
+fake_cassino/secret_info.py
+
+*sqlite3
+
+.vscode
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class

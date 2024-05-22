@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Fake Cassino</title>
+
+    {% block jquery %}{% endblock%}
+
+    <style>
+      body {
+        background-color: #242121;
+        color: #d8c4c4;
+      }
+
+      header {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 0;
+      }
+      
+      .header_container {
+        width: 80%;
+        /* margin: 0 auto; */
+        margin: 0 0 0 2cm;
+        /* background-color: aqua; */
+      }
+
+      nav ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+      }
+
+      nav ul li {
+          display: inline;
+          margin-right: 20px;
+      }
+
+      nav ul li a {
+          color: #fff;
+          text-decoration: none;
+        }
+    </style>
+    
+    {% block style %}{% endblock%}
+  </head>    
+
+  <body>
+    <header>
+      <div class="header_container">
+          <nav>
+            <ul>
+                <li><a href="{% url 'roulette:index' %}">Home</a></li>
+                <li><a href="{% url 'roulette:about' %}">Sobre</a></li>
+                <li><a onclick='startTutorial()' style="cursor: pointer;">Como apostar<a></li>
+                <li><a href="{% url 'roulette:user' %}">Usuário<a></li>
+            </ul>
+          </nav>
+      </div>
+    </header>
+
+    {% block content %}{% endblock%}
+
+    <script>
+      function startTutorial() {
+        if (window.location.pathname != "/home/") {
+          alert("O tutorial de como apostar apenas inicia se você estivar em 'Home'.")
+        } else {
+          showPopup("tutorial11", "status_bets", true);
+        }
+      }
+    </script>
+
+    {% block script %}{% endblock %}
+  </body>
+</html>

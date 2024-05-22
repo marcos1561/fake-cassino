@@ -1,0 +1,539 @@
+{% extends "roulette/base.html" %}
+
+{% block style%}
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .column {
+    flex: auto;
+    text-align: justify; 
+    max-width: 600px; 
+    padding: 20px; 
+    background-color: #403a3a;  
+    border-radius: 10px;
+    margin: 1cm;
+  }
+
+  .highlight {
+    background-color: #221c1c;
+    padding: 1px 10px 1px 10px;
+    border-radius: 5px;
+  }
+
+  .link {
+      color: #937f64;
+    }
+
+  h2 {
+      font-size: 24px; /* Example font size for the title */
+  }
+
+  p {
+      font-size: 16px; /* Example font size for the text content */
+  }
+  pre { line-height: 125%; }
+  td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+  span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+  td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+  span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+  .hll { background-color: #ffffcc }
+  .c { color: #3D7B7B; font-style: italic } /* Comment */
+  .err { border: 1px solid #FF0000 } /* Error */
+  .k { color: #008000; font-weight: bold } /* Keyword */
+  .o { color: #666666 } /* Operator */
+  .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+  .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+  .cp { color: #9C6500 } /* Comment.Preproc */
+  .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+  .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+  .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+  .gd { color: #A00000 } /* Generic.Deleted */
+  .ge { font-style: italic } /* Generic.Emph */
+  .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+  .gr { color: #E40000 } /* Generic.Error */
+  .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+  .gi { color: #008400 } /* Generic.Inserted */
+  .go { color: #717171 } /* Generic.Output */
+  .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+  .gs { font-weight: bold } /* Generic.Strong */
+  .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+  .gt { color: #0044DD } /* Generic.Traceback */
+  .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+  .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+  .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+  .kp { color: #008000 } /* Keyword.Pseudo */
+  .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+  .kt { color: #B00040 } /* Keyword.Type */
+  .m { color: #666666 } /* Literal.Number */
+  .s { color: #BA2121 } /* Literal.String */
+  .na { color: #687822 } /* Name.Attribute */
+  .nb { color: #008000 } /* Name.Builtin */
+  .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+  .no { color: #880000 } /* Name.Constant */
+  .nd { color: #AA22FF } /* Name.Decorator */
+  .ni { color: #717171; font-weight: bold } /* Name.Entity */
+  .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+  .nf { color: #0000FF } /* Name.Function */
+  .nl { color: #767600 } /* Name.Label */
+  .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+  .nt { color: #008000; font-weight: bold } /* Name.Tag */
+  .nv { color: #19177C } /* Name.Variable */
+  .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+  .w { color: #bbbbbb } /* Text.Whitespace */
+  .mb { color: #666666 } /* Literal.Number.Bin */
+  .mf { color: #666666 } /* Literal.Number.Float */
+  .mh { color: #666666 } /* Literal.Number.Hex */
+  .mi { color: #666666 } /* Literal.Number.Integer */
+  .mo { color: #666666 } /* Literal.Number.Oct */
+  .sa { color: #BA2121 } /* Literal.String.Affix */
+  .sb { color: #BA2121 } /* Literal.String.Backtick */
+  .sc { color: #BA2121 } /* Literal.String.Char */
+  .dl { color: #BA2121 } /* Literal.String.Delimiter */
+  .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+  .s2 { color: #BA2121 } /* Literal.String.Double */
+  .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+  .sh { color: #BA2121 } /* Literal.String.Heredoc */
+  .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+  .sx { color: #008000 } /* Literal.String.Other */
+  .sr { color: #A45A77 } /* Literal.String.Regex */
+  .s1 { color: #BA2121 } /* Literal.String.Single */
+  .ss { color: #19177C } /* Literal.String.Symbol */
+  .bp { color: #008000 } /* Name.Builtin.Pseudo */
+  .fm { color: #0000FF } /* Name.Function.Magic */
+  .vc { color: #19177C } /* Name.Variable.Class */
+  .vg { color: #19177C } /* Name.Variable.Global */
+  .vi { color: #19177C } /* Name.Variable.Instance */
+  .vm { color: #19177C } /* Name.Variable.Magic */
+  .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+  blockquote {
+    padding: 15px;
+    background: #262424;
+    border-radius: 5px;
+  }
+
+  table {
+    border-collapse: collapse;
+    border: 2px solid rgb(200,200,200);
+    letter-spacing: 1px;
+    font-size: 0.8rem;
+  }
+
+  td, th {
+    border: 1px solid rgb(190,190,190);
+    padding: 10px 20px;
+  }
+
+  th {
+    background-color: rgb(28, 25, 25);
+  }
+
+  td {
+    text-align: center;
+  }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="column">
+
+<h1>O que é esse site?</h1>
+<p>Esse site é uma simulação de cassinos onlines que possuem uma roleta. Todo o
+  dinheiro é fictício.
+  O seu objetivo é demonstrar que cassinos não necessitam de algoritmos complexos e engenhosos 
+  para ganharem dos usuários, por isso o lucro líquido da casa é exibido de forma explícita 
+  na página inicial. 
+</p>
+<p>
+  Se você acha que possui uma estratégia para ganhar do cassino, esse é o lugar perfeito para
+  testar a sua eficiência.
+</p>
+<h1>Como as cores da roleta são sorteadas?</h1>
+<p>O algoritmo que escolhe as cores é extremamente simples: Existe 47% de chande de cair 
+  <span style="color: red;">vermelho</span>/<span style="color: black;">preto</span> 
+  e 6% de chance de cair <span style="color: white;">branco</span>. <br> 
+  As seguintes 9 linhas de código compõem <b>todo o funcionamento</b> 
+  da roleta em relação a cor que é escolhida em uma rodada:
+</p>
+
+<div class="highlight">
+    <pre>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">rng</span> <span class="o">&lt;</span> <span class="mf">0.47</span><span class="p">:</span>
+    <span class="n">color_rolled</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">red</span>
+<span class="k">elif</span> <span class="n">rng</span> <span class="o">&lt;</span> <span class="mf">0.47</span> <span class="o">+</span> <span class="mf">0.47</span><span class="p">:</span> 
+    <span class="n">color_rolled</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">black</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">color_rolled</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">white</span></pre>
+</div>
+
+<p>Em que <span class="highlight">random.random()</span> é um número aleatório provindo de uma distribuição uniforme entre 0 e 1.</p>
+  
+<h1>Como a sorte é calculada?</h1>
+<p> 
+A sorte é um número que quantifica o quão sortudo ou azarado o apostar é no momento. Valores positivos representem que
+o apostar foi sortudo, e quão maior o número, mais sortudo ele foi, já números negativos representam azar.<br>
+
+A motivação inicial por trás da definição da sorte é a seguinte:
+
+<blockquote>
+<p>
+  Se o apostador acertou um evento de probabilidade \(p\), quantos lances de moedas justas devem ser acertados em sequência para obter a mesma probabilidade?
+</p>
+</blockquote>
+
+Sendo \(x\) o número de lances acertados, a reposta para essa pergunta é
+
+\[
+    \bigg(\frac{1}{2}\bigg)^x = p \Rightarrow x = log_{1/2}(p)
+\]
+
+Se tudo que o apostador fez foi apostar nesse evento, e acertar, podemos definir que sua sorte é a expressão obtida para \(x\).
+Mas e se o apostador acertar uma série de \(n\) eventos com probabilidades \(p_1, p_2, ..., p_n\), então, de acordo com a motivação inicial, sua sorte será
+
+\[
+    \bigg(\frac{1}{2}\bigg)^x = \prod_{i=1}^np_i \Rightarrow x = \log_{1/2}\bigg(\prod_{i=1}^np_i\bigg) = \sum_{i=1}^n \log_{1/2}(p_i)
+    \Rightarrow x = \sum_{i=1}^n\log_{1/2}(p_i)
+\]
+
+Ou seja, a sorte é a soma das sortes individuas de cada evento.
+
+Mas o que fazer com a sorte quando o usuário erra um evento de probabilidade de sucesso \(p\)? É tentador definir que a sorte deva diminuir 
+por \(log_{1/2}(1-p)\), pois a probabilidade de perder é \(1-p\), mas de acordo com essa definição, o valor esperado da sorte, em geral, não vai ser zero, 
+e isso é uma propriedade desejável que a sorte tenha. 
+Então vamos impor isso, seja \(S\) a variável aleatória da sorte e \(x\) o valor que sorte deve diminuir se o usuário não tiver sucesso, então
+
+\[
+    \langle S \rangle = 0 \Rightarrow \overbrace{p\log_{1/2}(p) - (1-p)x}^{\langle S \rangle} = 0 \Rightarrow x = \frac{p}{1-p}\log_{1/2}(p)
+\]
+
+Até o momento lidamos com eventos em que o usuário aposta em um único resultado, assim tendo uma probabilidade de sucesso bem definida, 
+mas se ele puder apostar em diferentes resultados ao mesmo tempo? (O que é possível na roleta, pois apostas em diferentes cores podem 
+ser feitas na mesma rodada). Nesse caso, faz sentido definir a sorte como sendo a soma das sortes de cada aposta feita. Para verificar se essa definição faz sentido, 
+é necessário que o valor esperado da sorte continue sendo 0. Vamos fazer isso, seja \(N\) o número de resultados possíveis, \(m\) o número de resultados apostados 
+e \(\{p_i\}_{i \in \{1,...,N\}}\) as probabilidades de sucesso de cada resultado, sendo que os primeiros \(m\) \(p\)'s (\(p_1, p_2, ..., p_m\)) são as probabilidades 
+dos resultados apostados. Seja \(s_j\) o valor da sorte se der o resultado \(j\), então
+
+\[
+    s_j = \begin{cases} \log_{1/2}(p_j) - \sum_{i \neq j}^{m}\frac{p_i}{1-p_i}\log_{1/2}(p_i) &, 1 \leq j \leq m \\
+    - \sum_{i=1}^{m}\frac{p_i}{1-p_i}\log_{1/2}(p_i) &, m < j \leq N
+    \end{cases}
+\]
+
+Pois quando \(1 \leq j \leq m\) o usuário ganha a j-ésima aposta, mas perde todas as outras, e quando \(j > m\) o usuário perde todas as \(m\) apostas. 
+Chamando de \(-L\) a sorte quando \(j >m\), podemos reescrever \(s_j\) da seguinte forma
+
+\[
+    \begin{aligned}
+    s_j &= \begin{cases} \log_{1/2}(p_j) -L + \frac{p_j}{1-p_j}\log_{1/2}(p_j) \\
+    -L 
+    \end{cases} = \\
+    &= \begin{cases} \frac{1}{1-p_j}\log_{1/2}(p_j) - L &, 1 \leq j \leq m \\
+    -L &, m < j \leq N
+    \end{cases}
+    \end{aligned}
+\]
+
+Agora estamos prontos para calcular o valor esperado
+
+\[
+\begin{aligned}
+ \langle S \rangle &= \sum_{j=1}^N p_js_j = \sum_{j=1}^{m}\bigg(\frac{p_j}{1-p_j}\log_{1/2}(p_j) - p_jL\bigg) + \sum_{j=m+1}^{N}-p_jL = \\
+ &= \overbrace{\sum_{j=1}^{m}\frac{p_j}{1-p_j}\log_{1/2}(p_j)}^{L} - L\sum_{j=1}^{m}p_j - L\sum_{j=m+1}^{N}p_j = L -L\overbrace{\sum_{j=1}^{N}p_j}^{1} = L - L = 0
+\end{aligned}
+\]
+
+Logo, o valor esperado de \(S\) é zero, como queríamos. Como o valor esperado de uma variável aleatória, que é a soma
+de outras variáveis aleatórias, é a soma dos valores esperados dessas variáveis, ou seja,
+
+\[
+  Y = \sum_{i=1}^n X_i \Rightarrow \langle Y \rangle = \sum_{i=1}^n \langle X_i \rangle
+\]
+
+podemos definir que a sorte de múltiplos eventos é a soma da sorte dos eventos individuas, que seu
+valor esperado vai continuar sendo zero (pois individualmente o valor esperado sempre é zero).
+Dessa forma, temos a seguinte definição para a sorte:
+<blockquote>
+<ul>
+  <li> Se um usuário apostar em um evento com probabilidade de sucesso \(p\), a sua sorte \(s\) será 
+    $$ s = \begin{cases} \log_{1/2}(p)&, \text{Se houver sucesso} \\ 
+    -\frac{p}{1-p}\log_{1/2}(p)&, \text{Se não houver sucesso} \end{cases}
+    $$
+  </li>
+  <li>
+    Se o usuário apostar em \(n\) eventos, a sua sorte é a soma das sortes de cada evento.  
+  </li>
+  <li>
+    Se o usuário pode apostar em diferentes resultados em um mesmo evento, as apostas são tratadas como eventos únicos, recaindo na definição anterior.
+  </li>
+</ul>
+</blockquote>
+
+Dado que sorte está definida como uma soma de variáveis aleatórias independentes, segue do <a class="link" href="https://pt.wikipedia.org/wiki/Teorema_central_do_limite">teorema do limite central</a> que a sua distribuição tende a ser
+gaussiana conforme \(n \to \infty\). Por questão de conveniência, vamos nos aproveitar desse fato para modificar a definição da sorte 
+tal que sua variância tenda a 1. Primeiramente precisamos calcular a variância de um evento individual.
+
+\[
+  Var(S) = \langle (S - \overbrace{\langle S \rangle}^{0})^2 \rangle = \langle S^2 \rangle
+\]
+
+Do cálculo de seu valor esperado, já sabemos qual é valor da sorte quando acontece o resultado \(j\) de \(N\) possibilidades (\(s_j\)), 
+sendo que o apostar apostou em \(m\) delas, então
+
+\[
+\begin{aligned}
+\langle S^2 \rangle &= \sum_{j=1}^N p_j s_j^2 = \sum_{j=1}^m p_j \bigg(\frac{1}{1-p_j}\log_{1/2}(p_j) - L\bigg)^2 + \sum_{j=m+1}^Np_jL^2 = \\
+&= \sum_{j=1}^m p_j\bigg(\frac{\log_{1/2}^2(p_j)}{(1-p_j)^2} + L^2 - \frac{2L}{1-p_j}\log_{1/2}(p_j) \bigg) + \sum_{j=m+1}^Np_jL^2 = \\
+&= \sum_{j=1}^m \frac{p_j}{(1-p_j)^2} \log_{1/2}^2(p_j) -2L\overbrace{\sum_{j=1}^m\frac{p_j}{1-p_j}\log_{1/2}(p_j)}^{L} + L^2 \overbrace{\sum_{j=1}^Np_j}^{1} = \\
+&= \sum_{j=1}^m \frac{p_j}{(1-p_j)^2} \log_{1/2}^2(p_j) - L^2
+\end{aligned}
+\]
+
+Perfeito, encontramos a variância da sorte de um evento individual. Agora, sendo \(X_i\) variáveis aleatórias independentes, é possível mostrar que
+
+\[
+  Y = \sum_{i=1}^n X_i \Rightarrow \langle Y^2 \rangle = \sum_{i=1}^n \langle X_i^2 \rangle
+\]
+
+Então a variância da sorte de \(n\) eventos é a soma das variâncias dos eventos individuais
+\[
+\begin{aligned}
+{S_t}_n := \sum_{i=1}^n S_i \Rightarrow \langle {S_t}_n^2 \rangle &= \sum_{i=i}^n \langle S_i^2 \rangle  = \sum_{i=1}^n \bigg( \sum_{j=1}^{m_i} \frac{p_{i, j}}{(1-p_{i, j})^2} \log_{1/2}^2(p_{i, j}) - L_{i}^2 \bigg) \\
+L_i &= \sum_{j=1}^{m_i} \frac{p_{i, j}}{1 - p_{i, j}}\log_{1/2}(p_{i, j}) 
+\end{aligned}
+\]
+
+em que \(p_{i, j}\) é a probabilidade de dar o resultado \(j\) no evento \(i\).
+Finalmente, vamos definir a sorte normalizada 
+
+\[
+  {\bar S_t}_n := \frac{ {S_t}_n }{\sqrt{\langle {S_t}_n^2 \rangle}}
+\]
+
+Claramente o desvio padrão de \(\bar {S_t}_n\) é 1, como queríamos, pois
+\[
+  \langle \bar {S_t}_n^2 \rangle = \frac{1}{\langle {S_t}_n^2 \rangle} \langle {S_t}_n^2 \rangle = 1
+\]
+
+A definição final da sorte será ser uma amostra de \(\bar {S_t}_n\), mas antes de enunciar a definição, vamos reescrever
+\(s_j\). Recapitulando, se um apostar apostar nos primeiros \(m_i\) possíveis resultados do i-ésimo evento, 
+e o resultado desse evento for \(r_i\), temos que a sorte será
+
+\[
+  s_{i, r_i} = \begin{cases} \frac{1}{1-p_{i, r_i}}\log_{1/2}(p_{i, r_i}) - L_i &, 1 \leq r_i \leq m_i \\
+  -L_i &, m_i < r_i \leq N
+  \end{cases}
+\]
+
+Escrever a sorte assim é ótimo para fazer cálculos teóricos, como fizemos acima, mas na prática essa forma não é muito boa, pois os resultados
+de cada evento precisam estar organizados tal que os primeiros \(m_i\) resultados sejam aqueles que foram apostados, isso não é problema em um
+cálculo teórico, mas na prática garantir essa organização é um caos, então vamos reescrever \(s_{i, r_i}\) de uma forma que não dependa da
+organização dos resultados dos eventos. Seja \(R_i\) o conjunto de todos os resultados possíveis do i-ésimo elemento e \(T_i \subseteq R_i \) o conjunto
+de resultados que o apostador apostou nesse evento, então 
+
+\[
+s_{i, r_i} = \begin{cases} \frac{1}{1-p_{i, r_i}}\log_{1/2}(p_{i, r_i}) - L_i &, r_i \in T_i \\
+-L_i &, r_i \notin T_i
+\end{cases}
+\]
+
+Ainda, utilizando a <a class="link" href="https://en.wikipedia.org/wiki/Indicator_function">função indicador</a> \(\mathbb{1}\), podemos escrever
+
+\[
+  s_{i, r_i} = \frac{\mathbb{1}_{T_i}(r_i)}{1-p_{i, r_i}}\log_{1/2}(p_{i, r_i}) - L_i
+\]
+
+Agora sim, vamos para a definição da sorte
+
+<blockquote>
+  <h3>Definição: Sorte</h3>
+  <p>
+  Se um usuário apostar em \(n\) eventos, sendo \(R_i\) o conjunto de possíveis resultados do i-ésimo evento e \(T_i\) 
+  os resultados apostados nesse evento, a sua sorte \(s\) será 
+  \[
+  s := \frac{1}{\sqrt{\langle {S_t}_n^2 \rangle}} \sum_{i=1}^n s_{i, r_i} 
+  \] 
+
+  em que \(r_i\) é o resultado do i-ésimo evento e \(s_{i, r_i}\) é o valor da variável aleatória associada a esse evento e tipo de aposta, dado esse resultado, conforme mostrado
+  anteriormente
+  
+  \[
+  s_{i, r_i} = \frac{\mathbb{1}_{T_i}(r_i)}{1-p_{i, r_i}}\log_{1/2}(p_{i, r_i}) - L_i
+  \]
+
+  \(p_{i, r_i}\) é a probabilidade do resultado do i-ésimo evento ser \(r_i\), e \(L_i\) é quanto a sorte diminui
+  se todas as apostas feitas no evento \(i\) são perdidas 
+
+  \[
+  L_i = \sum_{j \in T_i} \frac{p_{i, j}}{1 - p_{i, j}}\log_{1/2}(p_{i, j}) 
+  \]
+
+  \({S_t}_n := \sum_{i=1}^n S_i\) é a variável aleatória da sorte total não normalizada, e sua variância, conforme visto acima, é
+  
+  \[
+  \langle {S_t}_n^2 \rangle = \sum_{i=1}^n \bigg( \sum_{j \in T_i} \frac{p_{i, j}}{(1-p_{i, j})^2} \log_{1/2}^2(p_{i, j}) - L_{i}^2 \bigg)
+  \]
+  </p>
+</blockquote>
+
+Expandindo todos os termos da sorte, ficamos com a seguinte expressão
+\[
+  s = \frac{\sum_{i=1}^n \bigg[ \frac{\mathbb{1}_{T_i}(r_i)}{1-p_{i, r_i}} \log_{1/2}(p_{i, r_i}) - \sum_{j \in T_i} \frac{p_{i, j}}{1 - p_{i, j}}\log_{1/2}(p_{i, j})\bigg]}{\sqrt{\sum_{i=1}^n \bigg[ \sum_{j \in T_i} \frac{p_{i, j}}{(1-p_{i, j})^2} \log_{1/2}^2(p_{i, j}) - \bigg(\sum_{j \in T_i} \frac{p_{i, j}}{1 - p_{i, j}}\log_{1/2}(p_{i, j}) \bigg)^2 \bigg]}}
+\]
+</p>
+
+<h2>Sorte apostando na roleta</h2>
+<p>
+Voltando para a roleta, cada evento consiste em uma rodada da roleta. Cada rodada
+tem três possibilidades de aposta (\(R_i = \{\text{preto}, \text{vermelho}, \text{branco}\}, \forall i\)). As probabilidades
+de cair cada cor independem do número da rodada, ou seja, são sempre as mesmas
+
+<ul style="text-align: left;">
+  <li>\( p_{\text{preto}} = p_{\text{vermelho}} =  0,47\): Probabilidade de cair <span style="color: red;">vermelho</span>/<span style="color: black;">preto</span>.</li>
+  <li>\( p_{\text{branco}} = 0,06\): Probabilidade de cair <span style="color: rgb(255, 255, 255);">branco</span>.</li>
+</ul>
+
+Existem 7 formas diferentes de fazer uma aposta
+<br><br>
+<table>
+<tr>
+  <th>Id</th><th>Preto</th><th>Vermelho</th><th>Branco</th>
+</tr>
+<tr>
+  <td>1</td><td>x</td><td>-</td><td>-</td>
+</tr>
+<tr>
+  <td>2</td><td>-</td><td>x</td><td>-</td>
+</tr>
+<tr>
+  <td>3</td><td>-</td><td>-</td><td>x</td>
+</tr>
+<tr>
+  <td>4</td><td>x</td><td>x</td><td>-</td>
+</tr>
+<tr>
+  <td>5</td><td>x</td><td>-</td><td>x</td>
+</tr>
+<tr>
+  <td>6</td><td>-</td><td>x</td><td>x</td>
+</tr>
+<tr>
+  <td>7</td><td>x</td><td>x</td><td>x</td>
+</tr>
+</table>
+<br>
+então, existem 7 diferentes variáveis aleatórias possíveis para cada rodada (\(S_1, S_2, ..., S_7\)).
+Cada \(S\) possui uma variância e um \(L\) associado
+<br><br>
+<table>
+<tr>
+  <th>Id</th><th>\(\langle S_i^2 \rangle\)</th><th>\( L_i \)</th>
+</tr>
+<tr>
+  <td>1</td><td>1,05218</td><td>0,96595</td>
+</tr>
+<tr>
+  <td>2</td><td>1,05218</td><td>0,96595</td>
+</tr>
+<tr>
+  <td>3</td><td>1,05157</td><td>0,25908</td>
+</tr>
+<tr>
+  <td>4</td><td>0,23823</td><td>1,93191</td>
+</tr>
+<tr>
+  <td>5</td><td>1,60324</td><td>1,22503</td>
+</tr>
+<tr>
+  <td>6</td><td>1,60324</td><td>1,22503</td>
+</tr>
+<tr>
+  <td>7</td><td>0,28877</td><td>2,19099</td>
+</tr>
+</table>
+<br>
+
+e cada \(S_i\) possui 3 possíveis valores
+
+<br><br>
+<table>
+<tr>
+<th>Id</th><th>\(s_{i, preto}\)</th><th>\(s_{i, vermelho}\)</th><th>\(s_{i, branco}\)</th>
+</tr>
+<tr>
+<td>1</td><td>1,0893</td><td>-0,966</td><td>-0,966</td>
+</tr>
+<tr>
+<td>2</td><td>-0,966</td><td>1,0893</td><td>-0,966</td>
+</tr>
+<tr>
+<td>3</td><td>-0,2591</td><td>-0,2591</td><td>4,0589</td>
+</tr>
+<tr>
+<td>4</td><td>0,1233</td><td>0,1233</td><td>-1,9319</td>
+</tr>
+<tr>
+<td>5</td><td>0,8302</td><td>-1,225</td><td>3,0929</td>
+</tr>
+<tr>
+<td>6</td><td>-1,225</td><td>0,8302</td><td>3,0929</td>
+</tr>
+<tr>
+<td>7</td><td>-0,1358</td><td>-0,1358</td><td>2,127</td>
+</tr>
+</table>
+<br>
+
+Repare que perder apostando no branco é muito menos danoso à sorte do que perder no vermelho/preto, pois 
+o valor de \(S\) quando é perdido uma aposta no vermelho/preto é \(-0,966\), já quando é perdido uma aposta
+no branco é \(-0,2591	\), o que faz sentido, porque é muito mais provável (não necessita de muito azar) perder no branco.
+<br><br>
+Com essas duas tabelas é possível calcular a sorte dos apostadores. Por exemplo, suponha
+que um apostador fez as seguintes apostados
+
+<br><br>
+<table>
+<tr>
+  <th>Tipo da aposta</th><th>Cor rolada</th>
+</tr>
+<tr>
+  <td>1</td><td>Preto</td>
+</tr>
+<tr>
+  <td>5</td><td>Preto</td>
+</tr>
+</table>
+<br>
+
+podemos definir a n-tupla ordenada \(b\) que contém as apostas feitas, nesse caso \(b = (1, 5)\), então sua sorte é
+
+\[
+\begin{aligned}
+  \sum_{i = 1}^{2} s_{b_i, r_i} &= s_{1, preto} + s_{5, preto} = 1,0893 + 0,8302 = 1,9185 \\
+  \langle {S_t}_2^2 \rangle &= \langle S_1^2 \rangle + \langle S_5^2 \rangle = 1,05218 + 1,60324 = 2,65542 \\
+  s &= \frac{\sum_{i=1}^2 s_{b_i, r_i}}{\sqrt{\langle {S_t}_2^2 \rangle}} = \frac{1,9185}{\sqrt{2,65542}} = 1,178
+\end{aligned}
+\]
+</p>
+<p>
+Apenas por curiosidade, a sorte de uma pessoa que ganhou na <a class="link" href="https://loterias.caixa.gov.br/Paginas/default.aspx">mega-sena</a>
+é 7075,58, mas dado que a nossa definição foi baseada em a sorte ser uma soma de variáveis aleatórias, o seu valor perde sentido
+em um único evento com probabilidade extrema, como é o caso aqui. Podemos resolver isso calculando a sorte de uma pessoa que jogou uma moeda justa e errou o seu
+resultado, e em sequência apostou na mega-sena e ganhou. A sua sorte após errar o resultado da moeda é -1 e após ganhar na mega-sena é 24,577, ou seja,
+sua sorte aumentou em 25,577, que é justamente quantos lances de moedas justas precisam ser acertados, em sequência, para dar a mesma probabilidade
+de ganhar na mega-sena.
+</p>
+  </div>
+</div>
+{% endblock %}
+

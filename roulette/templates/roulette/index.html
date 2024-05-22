@@ -1,0 +1,973 @@
+{% extends "roulette/base.html" %}
+
+{% block jquery %}
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+{% endblock %}
+
+{% block style %}
+<style>
+    .bet_user_info {
+      display: flex;
+      padding: 0.5cm 1cm 0.5cm 1cm;
+      column-gap: 10px;
+      align-items: flex-start;
+    }
+
+    .user_container {
+      flex: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .use_info_container {
+      flex: auto;
+      display: flex;
+      /* align-items: center; */
+      flex-direction: column;
+      align-items: center;
+      border: 2px solid #151313;
+    }
+    
+    /* .log_sign_in {
+      flex: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .log_in_item {
+      color: #937f64;
+      font-size: xx-large;
+      margin: 0.5em;
+    } */
+
+    .user_info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      justify-items: center;
+      padding-bottom: 1em;
+    }
+
+    .user_wallet {
+      font-size: larger;
+      display: flex;
+      flex-direction: column;
+      row-gap: 0.5em;
+      margin: 0 40px 0 20px;
+    }
+    
+    .money_info {
+      font-size: larger;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-column-gap: 20px;
+      grid-row-gap: 0.5em;
+      /* grid-auto-rows: 200px; */
+    }
+
+    .log_out_btt {
+      background-color: #d8c4c4;
+      border-radius: 3px; 
+      padding: 3px; 
+      margin: 100px 0 0 0;
+      color: black;
+    }
+
+    .bet_container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .roullete_container {
+      margin: 0 0 1cm 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .roullete {
+      display: flex;
+      position: relative;
+    }
+    
+    .history_container {
+      border: 2px solid #151313;
+    }
+    
+    .history_tile {
+      text-align: center;
+    }
+
+    .history {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      column-gap: 4px;
+      row-gap: 4px;
+      padding: 3px;
+    }
+
+    .history_roll {
+      white-space: nowrap;
+      border-radius: 3px;
+      height: 0.5cm;
+      padding: 8px;
+      border-radius: 5px;
+    }
+    
+    .bg_red {
+      background-color: #ff0000;
+      color: black;
+    }
+    .bg_black {
+      background-color: #000000;
+      color: rgb(255, 0, 0);
+    }
+    .bg_white {
+      background-color: #ffffff;
+      color: black;
+    }
+    
+    .status_bets {
+      display: table;
+      border: 2px solid #151313;
+      position: relative;
+    }
+
+    .status {
+      margin: 1em;
+      padding: 1em;
+      border-radius: 5px;
+      text-align: center;
+    }
+    
+    .rolled_red {
+      background-color: #ff0000;
+      color: black;
+    }
+    .rolled_white {
+      background-color: #ffffff;
+      color: black;
+    }
+    .rolled_black {
+      background-color: #000000;
+      color: #ffffff;
+    }
+
+    .bets_amount_title {
+      text-align: center;
+      box-sizing: border-box;
+    }
+    
+    .amounts_container {
+      display: flex;
+    }
+    
+    .bets_amount {
+        padding: 5px;
+        border-radius: 5px;
+        margin: 3px;
+        width: 3cm; 
+    }
+    .red_amount { 
+      background-color: #ff0000; 
+      color: black; 
+      flex: initial;
+    }
+    .white_amount { 
+      background-color: #ffffff; 
+      color: black; 
+      flex: initial;
+    }
+    .black_amount { 
+      background-color: black; 
+      color: red; 
+      flex: initial;
+    }
+      
+    .cassino_balance {
+      position: relative;
+      flex: auto;
+      font-size: large;
+      display: table-cell;
+      text-align:center;
+      vertical-align: middle;
+      padding: 1em;
+      border: 2px solid #151313;
+    }
+
+    .make_bet {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .bet_amount {
+      border: solid;
+      border-radius: 5px;
+      background-color: bisque;
+      box-shadow: none;
+      width: 8cm;
+      padding: 8px;
+      margin: 10px 0px 10px 0px;
+    }
+    
+    .submit_btt {
+      border: solid;
+      /* border-color: #d53519;
+      background-color: #d53519; */
+      font-size: medium;
+      border-color: #92571f;
+      background-color: #92571f;
+      border-radius: 5px;
+      color: #000000;
+      width: 8cm;
+      padding: 8px;
+    }
+
+    .submit_btt:hover {
+      /* color: #3b3737; */
+      background-color:#bb813b;
+      transition: 0.5s;
+    }
+    
+    .submit_btt:active {
+      background-color:#a91d1d;
+      transition: 0.2s;
+    }
+    
+    .submit_btt:disabled {
+      border-color: #65574a;
+      color: #2b2621;
+      background-color:#65574a;
+      transition: 0.2s;
+    }
+
+    .btt_test {
+      border: solid;
+      font-size: medium;
+      border-color: #92571f;
+      background-color: #92571f;
+      border-radius: 5px;
+      color: #000000;
+      width: 8cm;
+      padding: 8px;
+    }
+
+    .btt_test:hover {
+      /* color: #3b3737; */
+      background-color:#bb813b;
+      transition: 0.5s;
+    }
+
+    .btt_test:active {
+      /* color: #3b3737; */
+      background-color:#a91d1d;
+      transition: 0.2s;
+    }
+
+    .bet_color {
+      display: flex;
+      flex-direction: row;
+      position: relative;
+    }
+
+    .red {
+      padding: 8px;
+      background-color: #ff0000;
+      color: black;
+      border-radius: 5px;
+    }
+    .black {
+      padding: 8px;
+      background-color: #000000;
+      color: rgb(255, 0, 0);
+      border-radius: 5px;
+    }
+    .white {
+      padding: 8px;
+      background-color: #ffffff;
+      color: black;
+      border-radius: 5px;
+      margin: 0px 4px 0px 4px;
+    }
+
+    .popup_container {
+      /* color: rgb(58, 53, 53); */
+      display: none;
+      position: absolute;
+      background-color: #a05a1d;
+      border: 1px solid #7c4718;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      z-index: 9999;
+    }
+
+    .popup_content {
+        text-align: center;
+    }
+
+    .close_popup {
+        border-radius: 5px;
+        background-color: #c09d71;
+        margin-top: 10px;
+        padding: 3px;
+        border: 1px solid #7b5a31;
+    }
+
+    .close_popup:hover {
+      background-color:#e6c295;
+      transition: 0.5s;
+    }
+
+    .arrow_bottom_left {
+      bottom: -15px; /* Adjust as needed to position the arrow */
+      left: 10px; /* Adjust as needed to position the arrow */
+    }
+    
+    .arrow_top_left {
+      top: -15px; /* Adjust as needed to position the arrow */
+      left: 10px; /* Adjust as needed to position the arrow */
+    }
+
+    .arrow {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 15px 0 15px 15px;
+      border-color: transparent transparent transparent #a05a1d; /* Arrow color matches background color of the popup */
+    }
+
+    .collapsible {
+      background-color: #5f5f5f;
+      color: #d8c4c4;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+      border-radius: 5px;
+    }
+    .active, .collapsible:hover {
+      background-color: #555;
+    }
+
+    .collapsible:after {
+      content: '\02795'; /* Unicode character for "plus" sign (+) */
+      font-size: 13px;
+      color: white;
+      float: right;
+      margin-left: 5px;
+    }
+
+    .active:after {
+      content: "\2796"; /* Unicode character for "minus" sign (-) */
+    }
+
+    .strats_container {
+      margin: 4em 6em 1em 1em;
+    }
+    
+
+    .strat {
+      margin-top: 1cm;
+      /* background-color: aqua; */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bet_user_info" style="display: flex;">
+  <div class="bet_container">
+      <div id="status_box" class="roullete_container">
+        {% include "roulette/roleta_status.html" %}
+      </div>
+      <form id="bet_info" method="post" action="{% url 'roulette:make_bet' %}">
+      {% csrf_token %}  
+      <div class="make_bet">
+          <div class="bet_color" id="bet_color">
+          {% include "roulette/tutorial/tutorial1.html" %}
+          <label class="red">
+              <input id="radio_red" class="ignore_enter" type="radio" name="color" value="red" checked>
+              Vermelho (2x)
+          </label>
+          <label class="white">
+              <input id="radio_white" class="ignore_enter" type="radio" name="color" value="white">
+              Branco (14x)
+          </label>
+          <label class="black">
+              <input id="radio_black" class="ignore_enter" type="radio" name="color" value="black">
+              Preto (2x)
+          </label>
+          </div>
+          <div style="position: relative;" id="div_bet_amount">
+          {% include 'roulette/tutorial/tutorial2.html' %}
+          <input type="text" name="amount" class="bet_amount ignore_enter" required id="bet_amount" placeholder="Valor da aposta (R$)">
+          </div>
+          <div style="position: relative;" id="div_submit">
+          {% include 'roulette/tutorial/tutorial3.html' %}
+          <input id="submit_bet" type="submit" class="submit_btt" value="Fazer aposta">
+          </div>
+      </div>
+      </form>
+  </div>
+  <div class="user_container">
+      <div id="user_box" class="use_info_container"></div>
+      {% if user.is_authenticated %}
+      <div style="text-align: right; margin: 10px 0 0 0;">
+      <label id="logout_btt" class="log_out_btt">Sair</label>
+      </div>
+      {% endif %}
+  </div>
+</div>
+
+<div class="strats_container">
+<button type="button" class="collapsible">Estratégias</button>
+<div class="strat">
+  <h1>Martingale</h1>
+  <form id="strat_pars" action="">
+    <label for="init_amount">Valor inicial:</label>
+    <input type="text" id="init_amount" name="init_amount"><br>
+    
+    <label for="pattern">Padrão:</label>
+    <input type="text" id="pattern" name="pattern"><br>
+    
+    <label for="bet_color">Cor da aposta:</label>
+    <input type="text" id="bet_color" name="bet_color"><br>
+    
+    <label for="num_gales">Número de gales:</label>
+    <input type="number" id="num_gales" name="num_gales"><br>
+    
+    <input type="submit" value="Iniciar">
+  </form>
+  <button id="stop_strat" onclick="stop_strat()">Parar</button>
+  <div id="strat_status">Parado</div>
+  <div id="current_strat_pars"></div>
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  var content = coll[i].nextElementSibling;
+  content.style.display = "none";
+
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+
+<script>
+  var first_request_user = true;
+  var is_logged = false;
+
+  $('#bet_info').submit(function(event) {
+    event.preventDefault();
+
+    var betData = $(this).serialize();
+
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'roulette:make_bet' %}",
+        data: betData,
+        success: function(response) {
+            // Request was successful
+            console.log('Form data submitted successfully');
+        },
+        error: function(xhr, status, error) {
+          if (xhr.status === 401) {
+            alert("Faça login para realizar apostas.");
+          } else if (xhr.status === 402) {
+            alert("Falta dinheiro para fazer a aposta.");
+          } else if (xhr.status === 403) {
+            alert("Clique em fazer a aposta somente quando estiver escrito 'Esperando apostas'.");
+          } else {
+            alert("Problema realizando a aposta.");
+          }
+        }
+    });
+  });
+
+  $(document).ready(function() {
+    strat.init();
+
+    $.ajaxSetup({ cache: false }); 
+    // Atualização dos dados dinâmicos
+    // updateRouletteStatus(); 
+    setInterval(function() {
+      updateRouletteStatus();
+      updateUserInfo();
+    }, 300);
+    
+    // Botão de logout
+    $("#logout_btt").click(function(){
+      $.get("{% url 'logout' %}", {}, function(data){
+        first_request_user = true;
+        location.reload();
+      });
+    });
+    
+    $.ajax({
+        url: "{% url 'is_logged' %}",
+        method: 'GET',
+        success: function(response) {
+          is_logged = response["is_logged"];
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching status:', error);
+        }
+    });
+
+    // Impede que a aposta seja feita pelos inputs que não são o botão.
+    form_inputs = document.getElementsByClassName("ignore_enter");
+    Array.from(form_inputs).forEach(function(input_i) {
+      input_i.addEventListener('keypress', function(event) {
+        if (event.keyCode === 13) { // Enter key
+          event.preventDefault();
+          return false;
+        }
+      });
+    });
+
+    // Impede que os botões do tutorial enviem apostas
+    var closePopupBtts = document.getElementsByClassName('close_popup');
+    Array.from(closePopupBtts).forEach(function(closeBtt) {
+      closeBtt.addEventListener('click', function(event) {
+        event.preventDefault();
+      });
+    });
+  });
+
+  roulette_state = {
+    "num_bets": 0,
+    "state": null,
+    "color_rolled": null,
+  }
+  function updateRouletteStatus() {
+    $.ajax({
+        url: "{% url 'roulette:get_status' %}",
+        method: 'GET',
+        data: roulette_state,
+        success: function(response) {
+          roulette_state = response["new_state"];
+
+          if (response["status"] != null) {
+            document.getElementById("roulette_status").innerHTML = response["status"];
+          }
+          if (response["bets_amount"] != null) {
+            document.getElementById("red_amount").innerText = response["bets_amount"]["red"];
+            document.getElementById("black_amount").innerText = response["bets_amount"]["black"];
+            document.getElementById("white_amount").innerText = response["bets_amount"]["white"];
+          }
+          if (response["history"] != null) {
+            document.getElementById("history").innerHTML = response["history"];
+            document.getElementById("cassino_balance").innerText = response["balance"];
+            document.getElementById("cassino_prob_gain").innerText = response["prob_gain"];
+          }
+
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching status:', error);
+        }
+    });
+
+    let submit_btt = document.getElementById("submit_bet");
+    if (roulette_state["state"] == 0) {
+      submit_btt.disabled = false;
+    } else {
+      submit_btt.disabled = true;
+    }
+
+    if (strat != null) {
+      strat.update(roulette_state.state, roulette_state.color_rolled);
+    }
+  }
+  
+  function updateUserInfo() {
+    if (first_request_user) {
+      first_request_user = false;
+      url = "{% url 'roulette:get_user_info' 1 %}";
+    } else {
+      if (is_logged == false) {
+        return
+      }
+      url = "{% url 'roulette:get_user_info' 0 %}";
+    }
+
+    $.ajax({
+        url: url,
+        method: 'GET',
+        success: function(response) {
+          var user_div = document.getElementById("user_box");
+          if (response["is_authenticated"] == false) {
+            strat.stop();
+            user_div.innerHTML = response["login_page"];
+            return;
+          } else {
+            // strat.start();
+          }
+          
+          if (response["to_update"] == false) {
+            return;
+          }
+
+          if (response["user_page"] != null) {
+            user_div.innerHTML = response["user_page"];
+          }
+
+          document.getElementById("user_wallet").innerText = response["balance"];
+          document.getElementById("money_spend").innerText = response["money_spend"];
+          document.getElementById("money_won").innerText = response["money_won"];
+          document.getElementById("gain").innerText = response["gain"];
+          document.getElementById("num_bets").innerText = "Número de apostas feitas: " + response["num_bets"];
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching status:', error);
+        }
+    });
+  }
+
+  function formatCurrency(input) {
+    // Remove non-numeric characters from input
+    // let value = input.value.replace(/[^0-9.]/g, '');
+    let value = input.value.replace("R$", "").trim();
+    console.log(value);
+
+    // Format the value as currency
+    let formattedValue = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+    console.log(formattedValue.replace("R$", "").trim());
+    console.log("=====");
+
+    // Update the input value with the formatted currency
+    input.value = formattedValue;
+  }
+
+  function cleanTutorials() {
+    var tutorials = document.querySelectorAll(`[id^="tutorial"]`);
+    tutorials.forEach(function(tutorial) {
+        tutorial.style.display = 'none';
+    });
+  }
+
+  function showPopup(tutorialId, targetId, isBottom, offset_up=0) {
+    cleanTutorials()
+    var tutorial = document.getElementById(tutorialId);
+    var targetRect = document.getElementById(targetId).getBoundingClientRect();
+    if (isBottom) {
+      tutorial.style.transform = 'translate(' + parseInt(targetRect.width) + 'px, ' + (parseInt(targetRect.height) + offset_up)  + 'px)'
+      // tutorial.style.top = (targetRect.bottom + 20) + 'px';
+      tutorial.style.left = '-20px';
+    } else {
+      tutorial.style.transform = 'translate(' + parseInt(targetRect.width) + 'px, -100%)';
+      tutorial.style.top = '-10px';
+      tutorial.style.left = '-20px';
+    }
+
+    // tutorial.style.left = targetRect.right + 'px';
+    tutorial.style.display = 'block';
+  } 
+
+  async function get_history() {
+    try {
+        const response = await fetch("{% url 'roulette:get_history' 10 %}");
+        if (!response.ok) {
+            throw new Error('Failed to fetch history');
+        }
+        const data = await response.json();
+        return { history: data.history, error: false };
+    } catch (error) {
+        console.error('Error fetching history:', error);
+        return { history: null, error: true };
+      }
+  }
+
+  document.getElementById('strat_pars').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
+    const formData = new FormData(this); // Get form data
+    
+    // Iterate over form data entries
+    const strat_pars = {};
+    for (const [key, value] of formData.entries()) {
+      strat_pars[key] = value;
+    }
+
+    console.log(strat_pars);
+    strat.set_pars(strat_pars);
+    strat.start();
+
+    document.getElementById("strat_status").innerText = "Rodando";
+    document.getElementById("current_strat_pars").innerText = JSON.stringify(strat_pars);
+  });
+  
+  function stop_strat() {
+    strat.stop()
+    
+    document.getElementById("strat_status").innerText = "Parado";
+    document.getElementById("current_strat_pars").innerText = "";
+  }
+
+  class Strategy {
+    first_bet_amount = null;
+    num_gales = null;
+    pattern = null;
+    bet_color = null;
+    
+    to_run = false;
+
+    pattern_id = [];
+    current_bet_amount = null;
+    gales_done = 0;
+    color_to_bet = null;
+
+    state = "wait_pattern";
+    has_init_round = false;
+    has_made_bet = false;
+    has_check_result = false;
+
+    balance = null;
+    bets = [];
+    gain = 0;
+
+    color_id_to_str = {
+      0: "black",
+      1: "red",
+      2: "white",
+    };
+    
+    rstatus_id_to_str = {
+      0: "waiting", 
+      1: "rolling",
+      2: "finished",
+    }
+
+    pattern_color_to_id = {
+      "b": 0,
+      "r": 1,
+      "w": 2,
+    };
+
+    color_mult = {
+      0: 2,
+      1: 2,
+      2: 14,
+    }
+
+    init() {
+      this.bet_amount = document.getElementById("bet_amount");
+      this.radio_color = {
+        "red": document.getElementById("radio_red"),
+        "black": document.getElementById("radio_black"),
+        "white": document.getElementById("radio_white"),
+      };
+      this.bet_btt = document.getElementById("submit_bet");
+
+      this.user_wallet = document.getElementById("user_wallet");
+    }
+
+    set_pars(pars) {
+      this.first_bet_amount = parseFloat(pars["init_amount"]);
+      this.num_gales = parseInt(pars["num_gales"]);
+      this.pattern = pars["pattern"].trim();
+      this.bet_color = this.pattern_color_to_id[pars["bet_color"].trim()];
+      this.bet_color = this.color_id_to_str[this.bet_color];
+      
+      let current_pars = {
+        first_bet_amount: this.first_bet_amount,
+        num_gales: this.num_gales,
+        pattern: this.pattern,
+        bet_color: this.bet_color,
+        bet_color: this.bet_color,
+        first_bet_amount: this,
+      };
+
+      console.log(current_pars);
+
+      this.color_to_bet = this.bet_color;
+      for (let i = 0; i < this.pattern.length; i++) {
+        this.pattern_id.push(this.pattern_color_to_id[this.pattern[i]]);
+      }
+    }
+
+    async update_balance() {
+      if (this.user_wallet == null) {
+        await delay(300);
+        this.user_wallet = document.getElementById("user_wallet");
+        
+        if (this.user_wallet == null) {
+          return false;
+        }
+      }
+
+      let bal = this.user_wallet.textContent;
+      this.balance = parseFloat(bal.replace(".", "").replace(",", ".").replace("R$", "").trim());
+      return true;
+    }
+
+    async update(rstatus, color_rolled) {
+      if (!this.to_run) {
+        return;
+      }
+      
+      await this.dispatch(rstatus, color_rolled);
+    }
+
+    async dispatch(rstatus, color_rolled) {
+      let rstatus_str = this.rstatus_id_to_str[rstatus];
+      if (rstatus_str == "waiting") {
+        this.has_check_result = false;
+
+        let success = await this.update_balance();
+        if (!success) {
+          console.log("Não atualizou a carteira");
+          this.reset();
+          return;
+        }
+        
+        if (this.has_init_round) {
+          return;
+        }
+        
+        console.log("\n============");
+        console.log(`Esperando aposta: ${this.has_init_round}`);
+        this.has_init_round = true;
+
+        if (this.state == "wait_pattern") {
+          console.log("Verificando padrão");
+          let history = (await get_history()).history;
+          this.wait_pattern(history);
+        } else if (this.state == "gales") {
+          console.log(`Fazendo gale ${this.gales_done + 1}`);
+          this.gale_bet();
+        }
+      } else {
+        this.has_init_round = false;
+
+        if (!this.has_made_bet || color_rolled == null || this.has_check_result) {
+          return;
+        }
+        
+        console.log("Verificando resultado:");
+        console.log(`Cor rolada: ${color_rolled}`);
+        this.check_result(color_rolled);
+        
+        this.has_made_bet = false;
+        console.log("=============\n");
+      }
+    }
+    
+    wait_pattern(history) {
+      for (let i = 0; i < this.pattern_id.length; i++) {
+        if (this.pattern_id[i] != history[i]) {
+          return;
+        }
+      }
+      console.log("Fazendo aposta inicial");
+      // this.color_to_bet = "red";
+      this.first_bet()
+    }
+
+    first_bet() {
+      this.current_bet_amount = this.first_bet_amount;
+      this.make_bet([{"color": this.color_to_bet, "amount": this.current_bet_amount}]);
+    }
+
+    gale_bet() {
+      this.current_bet_amount *= 2;
+      this.make_bet([{"color": this.color_to_bet, "amount": this.current_bet_amount}]);
+      this.gales_done += 1;
+    }
+
+    check_result(rolled_id) {
+      let rolled = this.color_id_to_str[rolled_id];
+
+      let won = false;
+      for (let id = 0; id < this.bets.length; id++) {
+        const bet = this.bets[id];
+        if (bet["color"] == rolled) {
+          won = true;
+          this.gain += bet["amount"] * (this.color_mult[rolled_id] - 1);  
+        } else {
+          this.gain -= bet["amount"];  
+        }
+      }
+
+      // this.bets.forEach(function(bet){
+      // });
+
+      if (won == true) {
+        console.log("Aposta ganha");
+        this.reset();
+      } else {
+        console.log("Aposta perdida");
+        if (this.gales_done >= this.num_gales) {
+          this.reset();
+        } else {
+          this.state = "gales";
+        }
+      }
+      
+      this.has_check_result = true;
+    }
+
+    reset() {
+      this.gales_done = 0;
+      this.current_bet_amount = this.first_bet_amount;
+      this.state = "wait_pattern";
+      this.has_init_round = false;
+      this.has_check_result = false;
+    }
+
+    make_bet(bets) {
+      for (let i = 0; i < bets.length; i++) {
+        const bet = bets[i];
+        
+        console.log(`Fazendo aposta: c:${bet["color"]} | a: ${bet["amount"]}`);
+
+        this.radio_color[bet["color"]].click();
+        this.bet_amount.value = bet["amount"].toString();
+        this.bet_btt.click();
+        
+        this.bets.push(bet);
+        this.has_made_bet = true;
+        delay(100).then();
+      }
+    }
+
+    stop() {
+      this.to_run = false;
+    }
+    
+    start() {
+      if (this.to_run) {
+        return;
+      }
+
+      this.reset();
+      this.to_run = true;
+    }
+  }
+
+  function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+  }
+
+  var strat = new Strategy();
+</script>
+
+
+{% endblock %}

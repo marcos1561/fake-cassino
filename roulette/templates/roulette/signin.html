@@ -1,0 +1,141 @@
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar</title>
+
+  <style>
+    body {
+      background-color: #242121;
+      color: #d8c4c4;
+    }
+
+    .main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: auto;
+      width: 70%;
+      /* border: 3px solid green; */
+      padding: 10px;
+      /* display: flex;
+      align-items: center;
+      height: 200px;
+      border: 3px solid green; */
+    }
+
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-block-end: 1em;
+    }
+
+    table {
+      flex: auto;
+      width: 80%;
+      align-items: center;
+    }
+
+    tr {
+      text-align: right;
+    }
+
+    .buttom {
+      font-size: medium;
+      color: #d8c4c4;
+      background-color: #92571f;
+      border: solid;
+      border-color: #92571f;
+      border-radius: 10px;
+    }
+
+    .buttom:hover {
+      background-color:#bb813b;
+      transition: 0.5s;
+    }
+
+    input {
+      /* border-radius: 4px; */
+      border-radius: 5px;
+      border: solid;
+      background-color: bisque;
+      padding: 10px;
+      width: 100%;
+    }
+
+    .div_submit {
+      justify-content: center;
+      display: flex;
+      width: 100%;
+    }
+
+    .submit_btt {
+      margin-top: 0.5cm;
+      width: 50%;
+    }
+
+    .home {
+      width: 100%;
+      text-align: center;
+    }
+
+    .home_btt {
+      width: 50%;
+      padding: 10px;
+    }
+
+    .error {
+      margin: 0 0 0.5cm 0;
+      padding: 10px;
+      color: black;
+      border-width: 10  px;
+      border-radius: 10px;
+      border: solid;
+      border-color: red;
+      background-color: rgb(219, 124, 124);
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    {% if error %}
+    <div class="error">
+      <p>{{ error.mssg }}</p>
+    </div>
+    {% endif %}
+    
+    {% if new_user %}
+    <script>
+      window.onload = function() {
+        alert("Novo usuário criado com sucesso");
+      };
+    </script>
+    {% endif %}
+    
+    <form method="post" action="{% url 'signin' %}">
+      {% csrf_token %}
+      <table>
+      <tr>
+        <td><label for="id_username">Username:</label></td>
+        <td><input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username"></td>
+      </tr>
+      <tr>
+        <td><label for="id_password">Password:</label></td>
+        <td><input type="password" name="password" autocomplete="current-password" required id="id_password"></td>
+      </tr>
+      </table>
+      
+      <div class="div_submit">
+        <input class="submit_btt buttom" type="submit" value="Registrar">
+      </div>
+      <!-- <input type="hidden" name="next" value="{{ next }}"> -->
+    </form>
+    
+    <a class="home" href="{% url 'roulette:index' %}">
+      <button class="home_btt buttom">Home</button>
+    </a>
+  </div>
+</body>
+</html>

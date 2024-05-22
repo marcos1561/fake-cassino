@@ -1,0 +1,27 @@
+<div class="roullete">
+  <div id="status_bets" class="status_bets">
+    {% include 'roulette/tutorial/tutorial11.html' %}
+    <div id="roulette_status"></div>
+    <div class="bets_done">
+      <div class="bets_amount_title">Apostas</div>
+      <div class="amounts_container">
+        <div id="red_amount" class="red_amount bets_amount"></div>
+        <div id="white_amount" class="white_amount bets_amount"></div>
+        <div id="black_amount" class="black_amount bets_amount"></div>
+      </div>
+    </div>
+  </div>
+  <div id="div_cassino_balance" class="cassino_balance">
+    {% include 'roulette/tutorial/tutorial12.html' %}
+    <div>Banca:</div>
+    <div id="cassino_balance" style="position: relative;"></div> <br>
+    <div>Probabilidade de lucro:</div>
+    <div id="cassino_prob_gain" style="position: relative;"></div>
+  </div>
+</div>
+<div class="history_container">
+  <div class="history_tile">Histórico</div>
+  <div id="history" class="history">
+  </div>
+</div>
+  
