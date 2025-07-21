@@ -18,4 +18,6 @@ Alguns objetivos do projeto são:
 *Imagem da página inicial do site.*
 
 # Definição da Sorte
-A definição da sorte está explicada na página "Sobre" do site. Um versão em pdf pode ser encontrada [aqui](notas/about.pdf).
+A definição da sorte está explicada na página "Sobre" do site. Um versão em pdf pode ser encontrada [aqui](notas/about.pdf). Neste README apenas vou mostrar a expressão matemática que define a sorte sem contexto algum, assim impressionando o leitor e passando a impressão que sou muito inteligente
+
+![Expressão matemática da sorte](/docs/luck_definition.png)
